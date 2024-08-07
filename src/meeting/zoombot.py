@@ -65,11 +65,13 @@ class ZoomMeet(BotBase):
         self.driver.get(f"https://app.zoom.us/wc/{meeting_id}/join?pwd={password}")
 
         self.driver.maximize_window()
-        if "DEV" not in environ:
+        try:
             self.driver.implicitly_wait(10)
             self.driver.find_element(By.XPATH, "//button[@id='onetrust-accept-btn-handler']").click()
 
             self.driver.find_element(By.XPATH, '//button[@id="wc_agree1"]').click()
+        except: # this section is region depended. In EU, this is required
+            pass
         #
 
         self.driver.implicitly_wait(60)
