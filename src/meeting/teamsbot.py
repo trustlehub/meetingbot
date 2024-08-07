@@ -157,7 +157,7 @@ class TeamsMeet(BotBase):
             sleep(5)  # wait for camera to be available
             # cam.click()
 
-        self.driver.implicitly_wait(10)
+        self.driver.implicitly_wait(60)
         self.driver.find_element(By.ID, 'prejoin-join-button').click()
 
         # Click the join button
