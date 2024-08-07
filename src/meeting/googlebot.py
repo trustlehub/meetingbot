@@ -254,21 +254,21 @@ if __name__ == "__main__":
         args[3],  # meeting_id
     )
 
-    # subprocess.Popen(
-    #     [  # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
-    #         "python",
-    #         str(GSTREAMER_PATH.resolve()),
-    #         "--display_num",
-    #         f":{args[1]}",
-    #         "--startx",
-    #         "0",
-    #         "--starty",
-    #         "0",
-    #         "--endx",
-    #         "1920",
-    #         "--endy",
-    #         "1080",
-    #     ])
+    subprocess.Popen(
+        [  # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
+            "python",
+            str(GSTREAMER_PATH.resolve()),
+            "--display_num",
+            f":{args[1]}",
+            "--startx",
+            "0",
+            "--starty",
+            "0",
+            "--endx",
+            "1920",
+            "--endy",
+            "1080",
+        ])
     thread = threading.Thread(target=google.setup_ws, daemon=True)
     thread.start()
 
