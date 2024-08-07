@@ -39,20 +39,6 @@ class ZoomMeet(BotBase):
         self.last_transcription_sent = datetime.now()
         super().__init__(ws_link, xvfb_display, meeting_id)
 
-        # create chrome instance
-        opt = Options()
-        opt.add_argument('--disable-blink-features=AutomationControlled')
-        opt.add_argument('--start-maximized')
-        # opt.add_argument("--no-sandbox");
-        # opt.add_argument("--disable-dev-shm-usage");
-        opt.add_experimental_option("prefs", {
-            "profile.default_content_setting_values.media_stream_mic": 1,
-            "profile.default_content_setting_values.media_stream_camera": 1,
-            "profile.default_content_setting_values.geolocation": 0,
-            "profile.default_content_setting_values.notifications": 1
-        })
-        self.driver = webdriver.Chrome(options=opt)
-
     def join_meeting(self):
         print(self.xvfb_display)
         print(self.meeting_link)
