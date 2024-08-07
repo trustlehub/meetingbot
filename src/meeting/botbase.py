@@ -25,6 +25,7 @@ class BotBase:
         # Create Chrome instance
         opt = Options()
         opt.add_argument('--disable-blink-features=AutomationControlled')
+        opt.add_argument('--no-sandbox')
         opt.add_argument('--start-maximized')
 
         opt.add_experimental_option("prefs", {
