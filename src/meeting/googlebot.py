@@ -273,7 +273,8 @@ if __name__ == "__main__":
     thread.start()
 
     google.glogin()
-    sleep(10)  # need to wait for google account to figure itself out
+    sleep(30)  # need to wait for google account to figure itself out
+    print("finished waiting 30 secs")
     google.join_meeting()
     google.record_and_stream(300)
 
