@@ -213,21 +213,21 @@ class TeamsMeet(BotBase):
                 print("send analysing")
                 # sleep(duration)
 
-                # subprocess.Popen([
-                #     # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
-                #     "python",
-                #     str(GSTREAMER_PATH.resolve()),
-                #     "--display_num",
-                #     f":{self.xvfb_display}",
-                #     "--startx",
-                #     str(int(x)),
-                #     "--starty",
-                #     str(int(y)),
-                #     "--endx",
-                #     str(int(x + width)),
-                #     "--endy",
-                #     str((y + height))
-                # ])
+                subprocess.Popen([
+                    # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
+                    "python",
+                    str(GSTREAMER_PATH.resolve()),
+                    "--display_num",
+                    f":{self.xvfb_display}",
+                    "--startx",
+                    str(int(x)),
+                    "--starty",
+                    str(int(y)),
+                    "--endx",
+                    str(int(x + width)),
+                    "--endy",
+                    str((y + height))
+                ])
                 print("opened gstreamer process")
         except Exception as e:
             print("Unexpected error")
@@ -242,21 +242,21 @@ if __name__ == "__main__":
                           args[2],  # ws_link 
                           args[3],  # meeting_id
                           )
-        subprocess.Popen([
-            # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
-            "python",
-            str(GSTREAMER_PATH.resolve()),
-            "--display_num",
-            f":{args[1]}",
-            "--startx",
-            "0",
-            "--starty",
-            "0",
-            "--endx",
-            "1920",
-            "--endy",
-            "1080",
-        ])
+        # subprocess.Popen([
+        #     # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
+        #     "python",
+        #     str(GSTREAMER_PATH.resolve()),
+        #     "--display_num",
+        #     f":{args[1]}",
+        #     "--startx",
+        #     "0",
+        #     "--starty",
+        #     "0",
+        #     "--endx",
+        #     "1920",
+        #     "--endy",
+        #     "1080",
+        # ])
 
         thread = threading.Thread(target=teams.setup_ws, daemon=True)
         thread.start()
