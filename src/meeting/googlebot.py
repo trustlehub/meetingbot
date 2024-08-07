@@ -153,6 +153,7 @@ class GoogleMeet(BotBase):
             self.driver.find_element(By.XPATH, '//*[text()="Ask to join" or text()="Join now"]').click()
             print("Ask to join activity: Done")
         except:
+            print("had an error")
             self.driver.save_screenshot("error.png")
 
     def record_and_stream(self, duration):
