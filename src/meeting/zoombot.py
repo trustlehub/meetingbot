@@ -147,21 +147,21 @@ class ZoomMeet(BotBase):
             self.inference_id
         )
 
-        # subprocess.Popen([
-        #     # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
-        #     "python",
-        #     str(GSTREAMER_PATH.resolve()),
-        #     "--display_num",
-        #     f":{self.xvfb_display}",
-        #     "--startx",
-        #     str(x),
-        #     "--starty",
-        #     str(y),
-        #     "--endx",
-        #     str(x + width),
-        #     "--endy",
-        #     str(y + height)
-        # ])
+        subprocess.Popen([
+            # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
+            "python",
+            str(GSTREAMER_PATH.resolve()),
+            "--display_num",
+            f":{self.xvfb_display}",
+            "--startx",
+            str(x),
+            "--starty",
+            str(y),
+            "--endx",
+            str(x + width),
+            "--endy",
+            str(y + height)
+        ])
 
         print("ran gstreamer")
 
@@ -289,21 +289,21 @@ if __name__ == "__main__":
                         )
         print("ran")
         thread = threading.Thread(target=zoom.setup_ws, daemon=True)
-        subprocess.Popen(
-            [  # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
-                "python",
-                str(GSTREAMER_PATH.resolve()),
-                "--display_num",
-                f":{args[1]}",
-                "--startx",
-                "0",
-                "--starty",
-                "0",
-                "--endx",
-                "1920",
-                "--endy",
-                "1080",
-            ])
+        # subprocess.Popen(
+        #     [  # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
+        #         "python",
+        #         str(GSTREAMER_PATH.resolve()),
+        #         "--display_num",
+        #         f":{args[1]}",
+        #         "--startx",
+        #         "0",
+        #         "--starty",
+        #         "0",
+        #         "--endx",
+        #         "1920",
+        #         "--endy",
+        #         "1080",
+        #     ])
         zoom.join_meeting()
         zoom.record_and_stream()
         while True:
