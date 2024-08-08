@@ -10,7 +10,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 
 from src.meeting.botbase import BotBase
-from src.utils.constants import GMAIL, GMAIL_PWD
+from src.utils.constants import GMAIL, GMAIL_PWD, BOT_NAME
 
 GSTREAMER_PATH = Path(__file__).resolve().parent / "../utils/webrtc_gstreamer.py"
 POLL_RATE = 0.2
@@ -138,19 +138,20 @@ class GoogleMeet(BotBase):
 
         if "DEV" in environ:
             # Turn off Microphone
-            self.driver.find_element(By.XPATH,'//*[@aria-label="Turn off microphone"]').click()
+            self.driver.find_element(By.XPATH, '//*[@aria-label="Turn off microphone"]').click()
             self.driver.implicitly_wait(3000)
             print("Turn off mic activity: Done")
 
             # Turn off Camera
             sleep(1)
-            self.driver.find_element(By.XPATH,'//*[@aria-label="Turn off camera"]').click()
+            self.driver.find_element(By.XPATH, '//*[@aria-label="Turn off camera"]').click()
             self.driver.implicitly_wait(3000)
             print("Turn off camera activity: Done")
 
         try:
+            self.driver.find_element(By.XPATH,"//input[@aria-label='Your name']").send_keys(BOT_NAME)
             self.driver.implicitly_wait(2000)
-            self.driver.find_element(By.XPATH, '//*[text()="Ask to join" or text()="Join now"]').click()
+            self.driver.find_element(By.XPATH,"//span[text()='Ask to join']").click()
             print("Ask to join activity: Done")
         except:
             print("had an error")
@@ -272,8 +273,6 @@ if __name__ == "__main__":
     thread = threading.Thread(target=google.setup_ws, daemon=True)
     thread.start()
 
-    google.glogin()
-    sleep(30)  # need to wait for google account to figure itself out
     print("finished waiting 30 secs")
     google.join_meeting()
     google.record_and_stream(300)

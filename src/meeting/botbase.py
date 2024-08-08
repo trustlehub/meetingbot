@@ -1,4 +1,5 @@
 import json
+import sys
 from uuid import uuid4
 
 from selenium import webdriver
@@ -71,8 +72,9 @@ class BotBase:
                 print("finished pin participant func")
 
     def exit_func(self):
-        # self.driver.quit()
+        self.driver.quit()
         print("should quit")
+        sys.exit(0)
 
     def pin_participant(self, participant_name):
         pass
