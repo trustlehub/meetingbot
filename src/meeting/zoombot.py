@@ -263,27 +263,32 @@ class ZoomMeet(BotBase):
                 )
                 self.last_transcription_sent = datetime.now()
     def get_participants(self):
-        updated = False
-        participant_list = self.driver.find_elements(By.XPATH, "//div[@class='participants-item-position']")
-        if len(participant_list) < 3:
-            if not self.is_timer_running():
-                self.start_timer(120, self.exit_func)
-        elif self.is_timer_running():
-            self.cancel_timer()
+        try:
+            updated = False
+            participant_list = self.driver.find_elements(By.XPATH, "//div[@class='participants-item-position']")
+            if len(participant_list) < 3:
+                if not self.is_timer_running():
+                    self.start_timer(120, self.exit_func)
+            elif self.is_timer_running():
+                self.cancel_timer()
 
-        for element in participant_list:
-            name = element.find_element(By.XPATH, ".//span[@class='participants-item__display-name']").text
-            if name not in self.participant_list:
-                self.participant_list.append(name)
-                updated = True
-        if updated:
-            self.websocket.send_participants(self.participant_list)
+            for element in participant_list:
+                name = element.find_element(By.XPATH, ".//span[@class='participants-item__display-name']").text
+                if name not in self.participant_list:
+                    self.participant_list.append(name)
+                    updated = True
+            if updated:
+                self.websocket.send_participants(self.participant_list)
 
-        # getting subject
-        # subject = self.driver.find_element(By.XPATH,
-        #                          "//div[@class='speaker-active-container__video-frame']//div[@class='video-avatar__avatar-footer']//span").text
-        # self.websocket.send_subject(subject)
-        # print("sent subject " + subject)
+            # getting subject
+            subject = self.driver.find_element(By.XPATH,
+                                     "//div[@class='speaker-active-container__video-frame']//div[@class='video-avatar__avatar-footer']//span").text
+            self.websocket.send_subject(subject)
+            print("sent subject " + subject)
+        except Exception as e: 
+            print("Probably a stale elemenet error")
+            print(e)
+            pass
 
 
 if __name__ == "__main__":
@@ -296,6 +301,7 @@ if __name__ == "__main__":
                         )
         print("ran")
         thread = threading.Thread(target=zoom.setup_ws, daemon=True)
+        thread.start()
         # subprocess.Popen(
         #     [  # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
         #         "python",
