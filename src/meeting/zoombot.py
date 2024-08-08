@@ -280,10 +280,10 @@ class ZoomMeet(BotBase):
             self.websocket.send_participants(self.participant_list)
 
         # getting subject
-        subject = self.driver.find_element(By.XPATH,
-                                 "//div[@class='speaker-active-container__video-frame']//div[@class='video-avatar__avatar-footer']//span").text
-        self.websocket.send_subject(subject)
-        print("sent subject " + subject)
+        # subject = self.driver.find_element(By.XPATH,
+        #                          "//div[@class='speaker-active-container__video-frame']//div[@class='video-avatar__avatar-footer']//span").text
+        # self.websocket.send_subject(subject)
+        # print("sent subject " + subject)
 
 
 if __name__ == "__main__":

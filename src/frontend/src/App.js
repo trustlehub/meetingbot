@@ -16,7 +16,7 @@ const App = () => {
   };
 
 
-  const { readyState,sendJsonMessage} = useWebSocket("ws://127.0.0.1:7000/",
+  const { readyState,sendJsonMessage} = useWebSocket("ws://5.161.229.199:7000/",
     {
       onMessage:
       async ({data}) => {
