@@ -1,2 +1,2 @@
 #!/bin/bash 
-PULSE_SINK=chrome_sink xvfb-run --listen-tcp --server-num=14 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" python -m src.meeting.zoombot https://us04web.zoom.us/j/76494877377?pwd=aR0Zqdzf1SX81TfS7bix60IboGMKXk.1 14 ws://localhost:7000 testid
+PULSE_SINK=chrome_sink xvfb-run --listen-tcp --server-num=51 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" python -m src.meeting.zoombot https://us04web.zoom.us/j/72008407626?pwd=MRWTRaf4h6HDh8b1aKXd9FUz6LBbKl.1 51 ws://localhost:7000 testid

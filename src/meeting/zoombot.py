@@ -134,6 +134,7 @@ class ZoomMeet(BotBase):
 
         panel_height = self.driver.execute_script('return window.outerHeight - window.innerHeight;')
 
+        self.driver.implicitly_wait(60)
         height, width, x, y = self.driver.find_element(By.XPATH,
                                                        "//div[@class='speaker-active-container__video-frame']").rect.values()
         y += panel_height
@@ -258,7 +259,7 @@ class ZoomMeet(BotBase):
                     text,
                     self.last_transcription_sent,
                     datetime.now()
-                    
+
                 )
                 self.last_transcription_sent = datetime.now()
     def get_participants(self):
@@ -277,6 +278,12 @@ class ZoomMeet(BotBase):
                 updated = True
         if updated:
             self.websocket.send_participants(self.participant_list)
+
+        # getting subject
+        subject = self.driver.find_element(By.XPATH,
+                                 "//div[@class='speaker-active-container__video-frame']//div[@class='video-avatar__avatar-footer']//span").text
+        self.websocket.send_subject(subject)
+        print("sent subject " + subject)
 
 
 if __name__ == "__main__":
@@ -310,7 +317,7 @@ if __name__ == "__main__":
             zoom.get_latest_transcriptions()
             zoom.get_participants()
             sleep(POLL_RATE)
-            
+
 
     except Exception as e:
         raise e
