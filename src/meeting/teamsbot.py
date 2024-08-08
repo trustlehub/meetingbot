@@ -14,7 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from src.meeting.botbase import BotBase
-from src.utils.constants import OUTLOOK_PWD, OUTLOOK, TEAMS_URL
+from src.utils.constants import BOT_NAME, OUTLOOK_PWD, OUTLOOK, TEAMS_URL
 
 GSTREAMER_PATH = Path(__file__).resolve().parent / "../utils/webrtc_gstreamer.py"
 POLL_RATE = 0.3
@@ -33,6 +33,7 @@ class TeamsMeet(BotBase):
 
     def pin_participant(self, participant_name):
         try:
+            self.driver.implicitly_wait(1)
             attendeesParent = self.driver.find_element(By.XPATH, "//*[@aria-label='Participants']")
             attendeesContainers = attendeesParent.find_elements(By.XPATH,
                                                                 ".//li[@role='presentation' and @data-cid='roster-participant']")
@@ -112,18 +113,17 @@ class TeamsMeet(BotBase):
 
     def tlogin(self):
         """
-        Old login code. Unreliable. Sometimes will fail. Do not use.
-        Login not required for joining meeting
+        Login to outlook
         """
 
         # Login Page
         self.driver.implicitly_wait(100)
-        self.driver.get(TEAMS_URL)
         self.driver.maximize_window()
+        self.driver.get("https://login.live.com/login.srf")
         # input outlook mail
 
         self.driver.find_element(By.XPATH, '//input[@type="email"]').send_keys(self.mail_address)  # enter email
-        self.driver.find_element(By.XPATH, '//input[@type="submit"]').click()  # click next
+        self.driver.find_element(By.XPATH, '//button[@type="submit"]').click()  # click next
 
         self.driver.implicitly_wait(0)  # removing implicit wait and replacing it. Should not mix implicit and explicit
         pw = WebDriverWait(self.driver, 10).until(
@@ -148,15 +148,24 @@ class TeamsMeet(BotBase):
         """Turns off camera and mic and joins meeting"""
         self.driver.implicitly_wait(60)
         self.driver.get(self.meeting_link)
+        
         self.driver.maximize_window()
-        url = self.driver.current_url
+        self.driver.implicitly_wait(600)
 
         if "DEV" in environ:
             self.driver.find_element(By.XPATH, '//div[@title="Microphone"]/div').click()
-            # cam = self.driver.find_element(By.XPATH, '//div[@title="Camera"]/div') # camera is off by default
-            sleep(5)  # wait for camera to be available
-            # cam.click()
+            cam = self.driver.find_element(By.XPATH, '//div[@title="Camera"]/div') # camera is off by default
+            sleep(2)  # wait for camera to be available
+            cam.click()
 
+        input_element = self.driver.find_element(By.XPATH, '//input[@type="text"][@placeholder="Type your name"]')
+
+        # Click the input element
+        input_element.click()
+        input_element.send_keys(BOT_NAME)
+
+
+        # Click the join button
         self.driver.implicitly_wait(60)
         self.driver.find_element(By.ID, 'prejoin-join-button').click()
 
@@ -260,7 +269,6 @@ if __name__ == "__main__":
 
         thread = threading.Thread(target=teams.setup_ws, daemon=True)
         thread.start()
-        teams.tlogin()
         teams.join_meeting()
         teams.record_and_stream()
         while True:

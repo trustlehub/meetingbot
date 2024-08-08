@@ -1,2 +1,2 @@
 #!/bin/bash 
-PULSE_SINK=chrome_sink xvfb-run --listen-tcp --server-num=56 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" python -m src.meeting.teamsbot https://teams.live.com/meet/9578787585782?p=wZdYjqSj2BbS8BMMJc 56 ws://localhost:7000 testid
+PULSE_SINK=chrome_sink xvfb-run --listen-tcp --server-num=10 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" python -m src.meeting.teamsbot https://teams.live.com/meet/9578787585782?p=wZdYjqSj2BbS8BMMJc 10 ws://localhost:7000 testid
