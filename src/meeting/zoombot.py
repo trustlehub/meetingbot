@@ -1,9 +1,5 @@
 # import required modules
-import asyncio
-import os
-
 from dotenv import load_dotenv
-from os import environ
 import re
 import subprocess
 import sys
@@ -112,10 +108,14 @@ class ZoomMeet(BotBase):
         more_button.click()
 
         try:
+            self.driver.implicitly_wait(10)
             self.driver.find_element(By.XPATH, "//a[text()='Captions']").click()
             self.driver.find_element(By.XPATH, "//a[text()='Show Captions']").click()
+            l = self.driver.find_elements(By.XPATH,"//span[text()='Caption Language']")
+            if len(l) > 0:
+                self.driver.find_element(By.XPATH,"//button[text()='Save']").click()
         except Exception as e:
-            print(e)
+            print("captions are probably already enabled")
 
         print("Joined to meeting")
 
@@ -147,21 +147,21 @@ class ZoomMeet(BotBase):
             self.inference_id
         )
 
-        subprocess.Popen([
-            # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
-            "python",
-            str(GSTREAMER_PATH.resolve()),
-            "--display_num",
-            f":{self.xvfb_display}",
-            "--startx",
-            str(x),
-            "--starty",
-            str(y),
-            "--endx",
-            str(x + width),
-            "--endy",
-            str(y + height)
-        ])
+        # subprocess.Popen([
+        #     # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
+        #     "python",
+        #     str(GSTREAMER_PATH.resolve()),
+        #     "--display_num",
+        #     f":{self.xvfb_display}",
+        #     "--startx",
+        #     str(x),
+        #     "--starty",
+        #     str(y),
+        #     "--endx",
+        #     str(x + width),
+        #     "--endy",
+        #     str(y + height)
+        # ])
 
         print("ran gstreamer")
 
@@ -266,7 +266,7 @@ class ZoomMeet(BotBase):
         participant_list = self.driver.find_elements(By.XPATH, "//div[@class='participants-item-position']")
         if len(participant_list) < 3:
             if not self.is_timer_running():
-                self.start_timer(30, self.exit_func)
+                self.start_timer(120, self.exit_func)
         elif self.is_timer_running():
             self.cancel_timer()
 
@@ -289,6 +289,21 @@ if __name__ == "__main__":
                         )
         print("ran")
         thread = threading.Thread(target=zoom.setup_ws, daemon=True)
+        subprocess.Popen(
+            [  # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
+                "python",
+                str(GSTREAMER_PATH.resolve()),
+                "--display_num",
+                f":{args[1]}",
+                "--startx",
+                "0",
+                "--starty",
+                "0",
+                "--endx",
+                "1920",
+                "--endy",
+                "1080",
+            ])
         zoom.join_meeting()
         zoom.record_and_stream()
         while True:

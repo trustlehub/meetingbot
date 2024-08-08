@@ -93,7 +93,7 @@ class GoogleMeet(BotBase):
 
             if len(self.participant_list) < 3:
                 if not self.is_timer_running():
-                    self.start_timer(30, self.exit_func)
+                    self.start_timer(120, self.exit_func)
             elif self.is_timer_running():
                 self.cancel_timer()
 
@@ -172,8 +172,7 @@ class GoogleMeet(BotBase):
                                      '//div[@jsname="H7Z7Vb"]//button[@aria-label="More options"]').click()
             print("clicked more options")
         except:
-            print(self.driver.find_element(By.XPATH,'//div[@jsname="H7Z7Vb"]').get_attribute('innerHTML'))
-            print("failed") 
+            print("failed clicking more options") 
 
         self.driver.implicitly_wait(10)
         self.driver.find_element(By.XPATH, "//li[.//span[text()='Change layout']]").click()

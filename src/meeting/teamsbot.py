@@ -99,7 +99,7 @@ class TeamsMeet(BotBase):
 
             if len(self.participant_list) < 3:
                 if not self.is_timer_running():
-                    self.start_timer(30, self.exit_func)
+                    self.start_timer(120, self.exit_func)
             elif self.is_timer_running():
                 self.cancel_timer()
             if self.participant_list != new_list:
