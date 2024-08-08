@@ -6,6 +6,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import threading
 
+from selenium.webdriver.chrome.webdriver import WebDriver
+
 from src.utils.websocketmanager import WebsocketConnection
 
 
@@ -35,7 +37,8 @@ class BotBase:
             "profile.default_content_setting_values.geolocation": 0,
             "profile.default_content_setting_values.notifications": 1
         })
-        self.driver = webdriver.Chrome(options=opt)
+        self.driver: WebDriver = webdriver.Chrome(options=opt)
+        self.driver.maximize_window()
 
     def start_timer(self, interval, func):
         # Cancel any existing timer before starting a new one

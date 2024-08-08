@@ -162,18 +162,21 @@ class GoogleMeet(BotBase):
         self.driver.implicitly_wait(60)  # waits 60 secs to be admitted to meeting
         self.driver.find_element(By.XPATH, "//button[@aria-label='Leave call']")
 
-        self.driver.implicitly_wait(30)
-        try:
-            self.driver.find_element(By.XPATH, "//span[text()='Got it']").click()  # sometimes this may appear.
-        except Exception as e:
-            print(e)
+        # self.driver.implicitly_wait(30)
+        # self.driver.find_element(By.XPATH,"//*[text()='Got it']").click()
+        # print("clicked got it")
 
-        self.driver.implicitly_wait(20)
-        self.driver.find_element(By.XPATH,
-                                 '//div[@jsname="H7Z7Vb"]//button[@aria-label="More options" and @jscontroller="soHxf"]').click()
+        try:
+            self.driver.implicitly_wait(10)
+            self.driver.find_element(By.XPATH,
+                                     '//div[@jsname="H7Z7Vb"]//button[@aria-label="More options"]').click()
+            print("clicked more options")
+        except:
+            print(self.driver.find_element(By.XPATH,'//div[@jsname="H7Z7Vb"]').get_attribute('innerHTML'))
+            print("failed") 
 
         self.driver.implicitly_wait(10)
-        self.driver.find_element(By.XPATH, "//span[text()='Change layout']").click()
+        self.driver.find_element(By.XPATH, "//li[.//span[text()='Change layout']]").click()
 
         self.driver.find_element(By.XPATH, '//span[text()="Spotlight"]').click()
 
@@ -223,21 +226,21 @@ class GoogleMeet(BotBase):
             print("send analysing")
             # sleep(duration)
 
-            subprocess.Popen([
-                # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
-                "python",
-                str(GSTREAMER_PATH.resolve()),
-                "--display_num",
-                f":{self.xvfb_display}",
-                "--startx",
-                str(int(x)),
-                "--starty",
-                str(int(y)),
-                "--endx",
-                str(int(x + width)),
-                "--endy",
-                str((y + height))
-            ])
+            # subprocess.Popen([
+            #     # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
+            #     "python",
+            #     str(GSTREAMER_PATH.resolve()),
+            #     "--display_num",
+            #     f":{self.xvfb_display}",
+            #     "--startx",
+            #     str(int(x)),
+            #     "--starty",
+            #     str(int(y)),
+            #     "--endx",
+            #     str(int(x + width)),
+            #     "--endy",
+            #     str((y + height))
+            # ])
             print("opened gstreamer process")
 
         print("Started streaming")
@@ -255,25 +258,25 @@ if __name__ == "__main__":
         args[3],  # meeting_id
     )
 
-    # subprocess.Popen(
-    #     [  # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
-    #         "python",
-    #         str(GSTREAMER_PATH.resolve()),
-    #         "--display_num",
-    #         f":{args[1]}",
-    #         "--startx",
-    #         "0",
-    #         "--starty",
-    #         "0",
-    #         "--endx",
-    #         "1920",
-    #         "--endy",
-    #         "1080",
-    #     ])
+    subprocess.Popen(
+        [  # "xvfb-run --listen-tcp --server-num=44 --auth-file=/tmp/xvfb.auth -s "-ac -screen 0 1920x1080x24" /
+            "python",
+            str(GSTREAMER_PATH.resolve()),
+            "--display_num",
+            f":{args[1]}",
+            "--startx",
+            "0",
+            "--starty",
+            "0",
+            "--endx",
+            "1920",
+            "--endy",
+            "1080",
+        ])
+    print("ran gstreamer")
     thread = threading.Thread(target=google.setup_ws, daemon=True)
     thread.start()
 
-    print("finished waiting 30 secs")
     google.join_meeting()
     google.record_and_stream(300)
 

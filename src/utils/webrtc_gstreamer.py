@@ -164,7 +164,6 @@ if __name__ == '__main__':
         video/x-raw,framerate=30/1 ! videoconvert ! queue ! vp8enc ! webmmux name=mux ! filesink location=output.webm \
         pulsesrc device=chrome_sink.monitor ! audioconvert ! audioresample ! queue ! opusenc ! mux.
     '''
-    print(args.display_num)
 
     pipe = Gst.parse_launch(recording_desc)
     pipe.set_state(Gst.State.PLAYING)
