@@ -100,7 +100,7 @@ class TeamsMeet(BotBase):
 
             if len(self.participant_list) < 3:
                 if not self.is_timer_running():
-                    self.start_timer(120, self.exit_func)
+                    self.start_timer(600, self.exit_func)
             elif self.is_timer_running():
                 self.cancel_timer()
             if self.participant_list != new_list:
@@ -108,6 +108,10 @@ class TeamsMeet(BotBase):
                 self.websocket.send_participants(new_list)
 
             self.participant_list = new_list
+            subject = self.driver.find_element(By.XPATH,
+                                               "//*[@data-tid='PinStage-wrapper' or @data-tid='SpeakerStage-wrapper']//*[@data-cid='calling-participant-stream']//div[@data-tid='participant-name-decorator-layer']//span[contains(@class,'StyledText')]").text
+
+            self.websocket.send_subject(subject)
         except:  # may send stale element errors
             pass
 

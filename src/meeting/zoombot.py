@@ -7,11 +7,8 @@ import threading
 from datetime import datetime
 from pathlib import Path
 from time import sleep
-from uuid import uuid4
 
-from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC

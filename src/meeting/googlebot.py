@@ -65,7 +65,6 @@ class GoogleMeet(BotBase):
                     spans = section.find_elements(By.XPATH, ".//span")
                     author = section.find_element(By.XPATH, "./div[1]/div").text
                     print("author " + author)
-                    print(spans)
                     for span in spans:
                         print(span.text)
                         content += span.text.strip() + " "
@@ -103,6 +102,10 @@ class GoogleMeet(BotBase):
                     new_list
                 )
             self.participant_list = new_list
+
+            subject = self.driver.find_element(By.XPATH,"//*[@class='oZRSLe']//div[@class='dwSJ2e']").text
+            self.websocket.send_subject(subject)
+            print('subject: '+ subject)
         except Exception as e:
             print("had a problem with getting participants")
             print(e)
@@ -114,17 +117,15 @@ class GoogleMeet(BotBase):
         self.driver.get(
             'https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https://www.google.com/&ec=GAZAAQ')
 
+        self.driver.implicitly_wait(10)
         self.driver.maximize_window()
         # Input Gmail
         self.driver.find_element(By.ID, "identifierId").send_keys(self.mail_address)
         self.driver.find_element(By.ID, "identifierNext").click()
-        self.driver.implicitly_wait(10)
 
         # Input Password
         self.driver.find_element(By.XPATH, '//*[@id="password"]/div[1]/div/div[1]/input').send_keys(self.password)
-        self.driver.implicitly_wait(10)
         self.driver.find_element(By.ID, "passwordNext").click()
-        self.driver.implicitly_wait(10)
 
         # Go to Google home page
         self.driver.get('https://google.com/')
@@ -206,6 +207,7 @@ class GoogleMeet(BotBase):
         sleep(5)  # to make sure captions area is initialised
         panel_height = self.driver.execute_script('return window.outerHeight - window.innerHeight;')
 
+        self.driver.implicitly_wait(60)
         video_element = self.driver.find_element(By.XPATH, "//*[@class='oZRSLe']")
 
         if video_element:
