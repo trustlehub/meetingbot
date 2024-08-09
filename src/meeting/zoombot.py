@@ -30,6 +30,7 @@ class ZoomMeet(BotBase):
         self.meeting_link = meeting_link
         self.transcriptions = []
         self.last_transcription_sent = datetime.now()
+        self.prev_subject = ""
         super().__init__(ws_link, xvfb_display, meeting_id)
 
     def join_meeting(self):
@@ -280,8 +281,10 @@ class ZoomMeet(BotBase):
             # getting subject
             subject = self.driver.find_element(By.XPATH,
                                      "//div[@class='speaker-active-container__video-frame']//div[@class='video-avatar__avatar-footer']//span").text
-            self.websocket.send_subject(subject)
-            print("sent subject " + subject)
+
+            if self.prev_subject != subject:
+                self.websocket.send_subject(subject)
+                self.prev_subject = subject
         except Exception as e: 
             print("Probably a stale elemenet error")
             print(e)

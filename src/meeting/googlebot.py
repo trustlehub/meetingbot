@@ -24,6 +24,7 @@ class GoogleMeet(BotBase):
         self.password = GMAIL_PWD
         self.meeting_link = meeting_link
         self.scraping_section_ids = {}
+        self.prev_subject = ""
         super().__init__(ws_link, xvfb_display, meeting_id)
 
     def pin_participant(self, participant_name):
@@ -104,8 +105,9 @@ class GoogleMeet(BotBase):
             self.participant_list = new_list
 
             subject = self.driver.find_element(By.XPATH,"//*[@class='oZRSLe']//div[@class='dwSJ2e']").text
-            self.websocket.send_subject(subject)
-            print('subject: '+ subject)
+            if self.prev_subject != subject:
+                self.websocket.send_subject(subject)
+                self.prev_subject = subject
         except Exception as e:
             print("had a problem with getting participants")
             print(e)
