@@ -43,6 +43,7 @@ sudo apt install libcairo2-dev pkg-config python3-dev
 ```
 pactl load-module module-null-sink sink_name=chrome_sink sink_properties=device.description="Chrome_Sink"
 ```
+*If you get an error like 'Access is denied' or something, You might want to add current user to pulse-access group*
 - Installing xvfb for headless mode
 ```
 sudo apt install xvfb
